@@ -32,11 +32,13 @@ class ChromeDriver:
         In headless mode prior to 64.0.3254.0, the cookie database does not get created and no cookies are returned
     """
 
-    def __init__(self,ua=False):
+    def __init__(self,ua=False, dnt=False):
         """
         set various global options here
         """
 
+        self.dnt = dnt
+        
         # set here if you want to use headless mode for Chrome
         self.headless = True
 
@@ -163,13 +165,10 @@ class ChromeDriver:
 
         # start the page load process, return error message if we fail
         try:
-            print('here')
-            driver._client.set_header_overrides(headers = {'DNT': 1, 'Referer': 'https://www.example.com'})
+            if self.dnt:
+                print("DNT on")
+                driver._client.set_header_overrides(headers = {'DNT': 1})
             driver.get(url)
-            for request in driver.requests:
-                if request.response:
-                    print(request.headers)
-            # print(driver.headers)
         except:
             driver.quit()
             return({

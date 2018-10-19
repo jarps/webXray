@@ -27,7 +27,7 @@ class Collector:
 		*will* retry pages that may not have loaded
 	"""
 
-	def __init__(self, db_engine, db_name, pages_file_name, browser_types, browser_wait, allow_timeseries=False, interval_minutes=1440):
+	def __init__(self, db_engine, db_name, pages_file_name, browser_types, browser_wait, allow_timeseries=False, interval_minutes=1440, dnt=False):
 		self.db_engine			= db_engine
 		self.startTime		 	= datetime.now()
 		self.db_name		 	= db_name
@@ -36,10 +36,11 @@ class Collector:
 		self.browser_wait		= browser_wait
 		self.allow_timeseries	= allow_timeseries
 		self.interval_minutes	= interval_minutes # default of 1440 is one day
+		self.dnt = dnt
 
 		# set the correct ua string for chrome, only do once
 		if 'chrome' in browser_types:
-			chrome_driver = ChromeDriver()
+			chrome_driver = ChromeDriver(dnt=dnt)
 			self.chrome_ua = chrome_driver.get_ua_for_headless()
 	# __init__
 
@@ -80,7 +81,7 @@ class Collector:
 			if browser_type == 'phantomjs':
 				browser_driver 	= PhantomDriver()
 			elif browser_type == 'chrome':
-				browser_driver 	= ChromeDriver(ua=self.chrome_ua)
+				browser_driver 	= ChromeDriver(ua=self.chrome_ua, dnt=self.dnt)
 
 			# support for timeseries collections - purposefully undocumented 
 			if self.allow_timeseries:
