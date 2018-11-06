@@ -53,7 +53,7 @@ browser_wait = 30
 #
 #	note that with manual tweaking the pool can be larger than the number
 #		of available cores, but proceed with caution
-pool_size = 1
+pool_size = 4
 
 # DATABASE ENGINE SELECTION
 # 	db_engine can be 'mysql', 'postgres', or 'sqlite'
@@ -258,7 +258,7 @@ def interaction(dnt):
         print('\t---------------------')
         
         # let's us go back to analyze
-        interaction()
+        interaction(dnt)
     elif selection == 'a':	
         # analyze
         print('\t==============')
@@ -277,7 +277,7 @@ def interaction(dnt):
         analyze(db_name)
         
         # restart interaction
-        interaction()
+        interaction(dnt)
 # interaction
 
 def collect(db_name, pages_file_name, dnt):
